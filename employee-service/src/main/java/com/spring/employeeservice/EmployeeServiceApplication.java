@@ -22,15 +22,15 @@ public class EmployeeServiceApplication {
     @Bean
     public ModelMapper getModel() {
         ModelMapper mapper = new ModelMapper();
-        /*Converter<String, LocalDate> converter = new Converter<String, LocalDate>() {
+        Converter<String, LocalDate> converter = new Converter<String, LocalDate>() {
             @Override
             public LocalDate convert(MappingContext<String, LocalDate> mappingContext) {
                 DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                 LocalDate date = LocalDate.parse(mappingContext.getSource(), format);
                 return date;
             }
-        };*/
-        Converter<String, LocalDate> converter = mappingContext -> {
+        };
+        /*Converter<String, LocalDate> converter = mappingContext -> {
             //Create a format pattern
             //DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             //Convert the String to LocalDate with the format pattern
@@ -39,7 +39,7 @@ public class EmployeeServiceApplication {
             //Return the localdate
             return LocalDate.parse(mappingContext.getSource(),
                      DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-        };
+        };*/
         mapper.addConverter(converter);
         return mapper;
     }
