@@ -1,0 +1,6 @@
+/home/marshall/IdeaProjects/employee-mgmt/employee-service/src/main/java/com/spring/employeeservice/EmployeeServiceApplication.java
+/home/marshall/IdeaProjects/employee-mgmt/employee-service/src/main/java/com/spring/employeeservice/bean/EmployeeDTO.java
+/home/marshall/IdeaProjects/employee-mgmt/employee-service/src/main/java/com/spring/employeeservice/controller/EmpController.java
+/home/marshall/IdeaProjects/employee-mgmt/employee-service/src/main/java/com/spring/employeeservice/bean/Employee.java
+/home/marshall/IdeaProjects/employee-mgmt/employee-service/src/main/java/com/spring/employeeservice/service/EmpService.java
+/home/marshall/IdeaProjects/employee-mgmt/employee-service/src/main/java/com/spring/employeeservice/repos/EmpRepo.java

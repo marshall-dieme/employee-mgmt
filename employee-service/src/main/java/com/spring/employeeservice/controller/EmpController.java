@@ -3,6 +3,8 @@ package com.spring.employeeservice.controller;
 import com.spring.employeeservice.bean.Employee;
 import com.spring.employeeservice.bean.EmployeeDTO;
 import com.spring.employeeservice.service.EmpService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,8 +12,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/emp")
+
 public class EmpController {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(EmpController.class);
     private final EmpService service;
 
     public EmpController(EmpService service) {
@@ -35,7 +39,14 @@ public class EmpController {
 
     @PostMapping
     public Employee create(@RequestBody EmployeeDTO emp) {
+        LOGGER.info("CREATING NEW EMPLOYEE...");
         return service.create(emp);
+    }
+
+    @PostMapping("/create/feign")
+    public Employee createWithFeignClient(@RequestBody EmployeeDTO emp) {
+        LOGGER.info("CREATING NEW EMPLOYEE...");
+        return service.createWithFeign(emp);
     }
 
     @PostMapping("/create")

@@ -2,7 +2,12 @@ package com.spring.employeeservice.service;
 
 import com.spring.employeeservice.bean.Employee;
 import com.spring.employeeservice.bean.EmployeeDTO;
+import com.spring.employeeservice.proxies.DeptProxy;
 import com.spring.employeeservice.repos.EmpRepo;
+import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,6 +21,12 @@ import java.util.Optional;
 @Service
 public class EmpService {
     private final EmpRepo repo;
+    private final Logger LOGGER = LoggerFactory.getLogger(EmpService.class);
+
+    @Autowired
+    private DeptProxy proxy;
+    @Autowired
+    private ModelMapper mapper;
 
     public EmpService(EmpRepo repo) {
         this.repo = repo;
@@ -30,18 +41,23 @@ public class EmpService {
     }
 
     public Employee create(EmployeeDTO dto) {
-        Employee employee = new Employee();
-        RestTemplate template = new RestTemplate();
-        Map<String, String> urlValues = new HashMap<>();
-        urlValues.put("name", dto.getDept());
-        String idDept = template.getForEntity(
-                "http://localhost:8700/depts/name/{name}",
-                        String.class,
-                        urlValues)
-                        .getBody();
-        changeToModel(dto, employee);
-        employee.setIdDept(idDept);
-        return repo.save(employee);
+        Employee employee = mapper.map(dto, Employee.class);
+        try{
+            RestTemplate template = new RestTemplate();
+            Map<String, String> urlValues = new HashMap<>();
+            urlValues.put("name", dto.getDept());
+            String idDept = template.getForEntity(
+                            "http://localhost:8700/depts/name/{name}",
+                            String.class,
+                            urlValues)
+                    .getBody();
+            // changeToModel(dto, employee);
+            employee.setIdDept(idDept);
+            employee = repo.save(employee);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+        }
+        return employee;
     }
 
     public Employee update(EmployeeDTO dto) {
@@ -84,9 +100,22 @@ public class EmpService {
         Map<String, String> values = new HashMap<>();
         values.put("idDept", idDept);
         values.put("idEmp", String.valueOf(emp.getId()));
-        new RestTemplate().getForEntity("http://localhost:8900/relation/{idDept}/{idEmp}",
+        new RestTemplate().getForEntity(
+                "http://localhost:8900/relation/{idDept}/{idEmp}",
                 Void.class, values);
 
         return emp;
+    }
+
+    public Employee createWithFeign(EmployeeDTO emp) {
+        Employee employee = mapper.map(emp, Employee.class);
+        try{
+            String idDept = proxy.getIdDept(emp.getDept());
+            employee.setIdDept(idDept);
+            employee = repo.save(employee);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+        }
+        return employee;
     }
 }

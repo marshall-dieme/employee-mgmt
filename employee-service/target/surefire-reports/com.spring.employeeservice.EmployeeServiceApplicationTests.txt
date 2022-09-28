@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.spring.employeeservice.EmployeeServiceApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 31.209 s - in com.spring.employeeservice.EmployeeServiceApplicationTests
